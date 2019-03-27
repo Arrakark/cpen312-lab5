@@ -554,6 +554,62 @@ xchg_xy:
 	mov x+3, a
 	ret
 
+
+; Look-up table for 7-seg displays
+T_7seg:
+    DB 0C0H, 0F9H, 0A4H, 0B0H, 099H
+    DB 092H, 082H, 0F8H, 080H, 090H
+    DB 088H, 083H
+
+; An unsigned 32-bit number results in a 10-digit BCD number.
+; Since there are only six 7-segment displays on the DE0-CV
+; board, wer are limited to just 6-digits BCD numbers.
+Display_BCD:
+	
+	mov dptr, #T_7seg
+
+	mov a, bcd+2
+	swap a
+	anl a, #0FH
+	movc a, @a+dptr
+	mov HEX5, a
+	
+	mov a, bcd+2
+	anl a, #0FH
+	movc a, @a+dptr
+	mov HEX4, a
+	
+	mov a, bcd+1
+	swap a
+	anl a, #0FH
+	movc a, @a+dptr
+	mov HEX3, a
+	
+	mov a, bcd+1
+	anl a, #0FH
+	movc a, @a+dptr
+	mov HEX2, a
+
+	mov a, bcd+0
+	swap a
+	anl a, #0FH
+	movc a, @a+dptr
+	mov HEX1, a
+	
+	mov a, bcd+0
+	anl a, #0FH
+	movc a, @a+dptr
+	mov HEX0, a
+	
+	ret
+
+wait_for_key1:
+key1_is_one:
+	jb KEY.1, key1_is_one ; loop while the button is not pressed
+key1_is_zero:
+	jnb KEY.1, key1_is_zero ; loop while the button is pressed
+	ret
+
 Load_X MAC
 	mov x+0, #low (%0 % 0x10000) 
 	mov x+1, #high(%0 % 0x10000) 
