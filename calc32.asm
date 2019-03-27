@@ -138,6 +138,11 @@ mycode:
 ; is  the  ‘=’  button.    Since  there  are  not  enough  buttons  to assign  multiplication  and  division,  use  KEY0  as  a  shift  key:    
 ; if  KEY0  and  KEY3  are pressed, the operation is ‘*’.  Similarly, if KEY0 and KEY2 are pressed, the operation is ‘/’. 
 
+; + : x
+; - : /
+; =
+; shift
+
 forever:
 	; add or multiply
 	jb KEY.3, no_add ; If '+' key not pressed, skip
